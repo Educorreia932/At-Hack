@@ -1,6 +1,6 @@
 package com.game
 
-import org.cosplay.CPColor.{C_BLACK, C_SLATE_BLUE3, C_WHITE}
+import org.cosplay.CPColor.*
 import org.cosplay.CPPixel.&&
 import org.cosplay.*
 import org.cosplay.CPKeyboardKey.*
@@ -14,8 +14,11 @@ object TerminalScene extends CPScene("terminal", None, BG_PX) {
 			if (pos < text.length && ch == ' ')
 				text.charAt(pos) && (C_BLACK, C_WHITE)
 
+			else if (pos < text.length && ch == text.charAt(pos))
+				ch && (C_BLACK, C_GREEN)
+
 			else
-				ch && (C_BLACK, C_WHITE)
+				ch && (C_BLACK, C_RED)
 		}
 
 	private val pwdTin = CPTextInputSprite(
