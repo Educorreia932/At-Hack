@@ -7,6 +7,9 @@ import org.cosplay.CPKeyboardKey.*
 
 object TerminalScene extends CPScene("terminal", None, BG_PX) {
 	val text = "hello world"
+	var time = 100.0
+	var guess: String = ""
+	var currentPosition = 0
 
 	def mkSkin(active: Boolean, passwd: Boolean): (Char, Int, Boolean) => CPPixel =
 		(ch: Char, pos: Int, isCur: Boolean) => {
@@ -26,7 +29,7 @@ object TerminalScene extends CPScene("terminal", None, BG_PX) {
 				ch && (C_BLACK, C_BLACK)
 		}
 
-	val pwdTin = new CPTextInputSprite(
+	private val pwdTin = new CPTextInputSprite(
 		"text",
 		6,
 		8,
@@ -38,11 +41,33 @@ object TerminalScene extends CPScene("terminal", None, BG_PX) {
 		mkSkin(false, true),
 		submitKeys = Seq(KEY_ENTER),
 		next = Option("user")
-	)
+	) :
+		override def update(ctx: CPSceneObjectContext): Unit =
+			var update = true
 
-	private val timerSprite = new CPLabelSprite(6, 3, 1, text = "100", C_WHITE):
-		override def update(ctx: CPSceneObjectContext): Unit = 
-			this.setText((this.getText.toInt - 1).toString)
+			if (ctx.getKbEvent.nonEmpty) {
+				ctx.getKbEvent.get.key match {
+					case KEY_BACKSPACE =>
+						if (guess.nonEmpty && text.substring(0, guess.length).equals(guess))
+							update = false
+							
+						else
+							guess = guess.dropRight(1)
+
+					case _ =>
+						guess = guess + ctx.getKbEvent.get.key.ch
+				}
+			}
+
+			if (update)
+				super.update(ctx)
+
+	private val timerSprite = new CPLabelSprite(6, 3, 1, text = time.toString, C_WHITE) :
+		override def update(ctx: CPSceneObjectContext): Unit =
+			super.update(ctx)
+
+			time -= 0.1
+			this.setText(time.toInt.toString)
 
 	addObjects(
 		pwdTin,
