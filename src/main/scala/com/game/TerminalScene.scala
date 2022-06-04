@@ -10,6 +10,7 @@ object TerminalScene extends CPScene("terminal", None, BG_PX) {
 	var time = 100.0
 	var guess: String = ""
 	var currentPosition = 0
+	var incorrectIndex = 0
 
 	def mkSkin(active: Boolean, passwd: Boolean): (Char, Int, Boolean) => CPPixel =
 		(ch: Char, pos: Int, isCur: Boolean) => {
@@ -17,9 +18,8 @@ object TerminalScene extends CPScene("terminal", None, BG_PX) {
 				if (ch == ' ')
 					text.charAt(pos) && (C_WHITE, C_BLACK)
 
-				else if (ch == text.charAt(pos))
+				else if (pos < incorrectIndex)
 					ch && (C_GREEN, C_BLACK)
-
 
 				else
 					ch && (C_RED, C_BLACK)
@@ -53,9 +53,15 @@ object TerminalScene extends CPScene("terminal", None, BG_PX) {
 							
 						else
 							guess = guess.dropRight(1)
+							currentPosition -= 1
 
 					case _ =>
-						guess = guess + ctx.getKbEvent.get.key.ch
+						guess = guess + ctx.getKbEvent.get.key.ch // Append new character to guess
+						
+						if (guess.charAt(currentPosition) == text.charAt(currentPosition))
+							incorrectIndex += 1
+						
+						currentPosition += 1
 				}
 			}
 
