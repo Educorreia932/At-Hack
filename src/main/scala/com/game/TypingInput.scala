@@ -1,7 +1,6 @@
 package com.game
 
-import org.cosplay.CPColor.{C_BLACK, C_GREEN, C_RED, C_WHITE}
-import org.cosplay.{CPPixel, CPRand, CPSceneObjectContext, CPTextInputSprite}
+import org.cosplay.CPColor.*
 import org.cosplay.CPKeyboardKey.*
 import org.cosplay.*
 import org.cosplay.CPPixel.*
@@ -11,7 +10,7 @@ import scala.annotation.static
 private var incorrectIndex: Int = 0
 
 private def skin(text: String) =
-	(ch: Char, pos: Int, isCur: Boolean) => {
+	(ch: Char, pos: Int, _: Boolean) => {
 		if (pos < text.length) {
 			if (ch == ' ')
 				text.charAt(pos) && (C_WHITE, C_BLACK)
@@ -26,7 +25,7 @@ private def skin(text: String) =
 		else
 			ch && (C_BLACK, C_BLACK)
 	}
-	
+
 class TypingInput(
 	x: Int,
 	y: Int,
@@ -46,7 +45,8 @@ class TypingInput(
 ) {
 	var guess: String = ""
 	var currentPosition = 0
-	
+	var wordScore = 0
+
 	override def update(ctx: CPSceneObjectContext): Unit =
 		var update = true
 
@@ -61,10 +61,19 @@ class TypingInput(
 						currentPosition -= 1
 
 				case _ =>
-					guess += ctx.getKbEvent.get.key.ch // Append new character to guess
+					val ch = ctx.getKbEvent.get.key.ch
+					guess += ch // Append new character to guess
+					println(ch)
 
-					if (guess.charAt(currentPosition) == text.charAt(currentPosition) && text.substring(0, guess.length).equals(guess))
+					if (guess.charAt(currentPosition) == text.charAt(currentPosition) && text.substring(0, guess.length).equals(guess)) {
 						incorrectIndex = currentPosition + 1
+						wordScore += 1
+
+						if (ch == ' ') {
+							GameState.time += wordScore
+							wordScore = 0
+						}
+					}
 
 					currentPosition += 1
 			}
