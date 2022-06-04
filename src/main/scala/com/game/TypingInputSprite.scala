@@ -7,20 +7,15 @@ import org.cosplay.CPPixel.*
 
 import scala.collection.mutable
 
-class CompleteInputSprite(
+class TypingInputSprite(
 	id: String = s"input-spr-${CPRand.guid6}",
 	x: Int,
 	y: Int,
 	z: Int,
-	visLen: Int,
-	maxBuf: Int,
 	private var next: Option[String] = None,
-	submitKeys: Seq[CPKeyboardKey] = Seq(KEY_ENTER),
-	text: String
+	text: String,
 ) extends CPSceneObject(id) :
-	require(maxBuf >= visLen, "'maxBuf' must be >= 'visLen'.")
-
-	private val dim = CPDim(visLen, 1)
+	private val dim = CPDim(text.length, 1)
 	private val buf = mutable.ArrayBuffer.empty[Char]
 	private var currentPosition = -1
 	private var lastStart = 0
@@ -28,24 +23,26 @@ class CompleteInputSprite(
 	private val pxs = mutable.ArrayBuffer.empty[CPPixel]
 	private var res: Option[String] = None
 	private var lastCorrect = -1
+	private val submitKeys = Seq(KEY_ENTER)
+	private var wordScore = 0
 
 	reset()
 
 	private def reset(): Unit =
 		buf.clear()
 		val len = buf.length
-		lastStart = (len - visLen).max(0)
-		currentPosition = if len < maxBuf then len else len - 1
+		lastStart = (len - text.length).max(0)
+		currentPosition = if len < text.length then len else len - 1
 
 	override def render(ctx: CPSceneObjectContext): Unit =
 		val skin = if ctx.isFocusOwner then this.skin(true) else this.skin(false)
 		pxs.clear()
 		val delta = currentPosition - lastStart
-		val start = if delta >= 0 && delta < visLen then lastStart else lastStart + delta.sign
+		val start = if delta >= 0 && delta < text.length then lastStart else lastStart + delta.sign
 		lastStart = start
-		val end = start + visLen
+		val end = start + text.length
 		val len = buf.length
-		var i = start
+		var i = 0
 
 		while i < end do
 			val ch = if i < len then buf(i) else ' '
@@ -73,22 +70,33 @@ class CompleteInputSprite(
 
 					case key if submitKeys.contains(key) =>
 						if (finished()) {
+							GameState.time += wordScore
+
 							done(Option(buf.toString()))
 
 							if (next.isDefined)
 								ctx.acquireFocus(next.get)
 
-							// TODO: Finish stage
+							else {
+								ctx.addScene(SuccessScene, true)
+							}
 						}
 
 					case key if key.isPrintable =>
-						if currentPosition < maxBuf then
+						if (key == KEY_SPACE) {
+							GameState.time += wordScore
+							wordScore = 0
+						}
+
+						if currentPosition < text.length then
 							buf.insert(currentPosition, key.ch)
 
 							currentPosition += 1
 
-							if (correct())
+							if (correct()) {
 								lastCorrect += 1
+								wordScore += 1
+							}
 
 					case _ => ()
 
