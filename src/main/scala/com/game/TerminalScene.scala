@@ -7,27 +7,32 @@ import org.cosplay.CPKeyboardKey.*
 
 object TerminalScene extends CPScene("terminal", None, BG_PX) {
 	val text = "hello world"
-	var guess = ""
 
 	def mkSkin(active: Boolean, passwd: Boolean): (Char, Int, Boolean) => CPPixel =
 		(ch: Char, pos: Int, isCur: Boolean) => {
-			if (pos < text.length && ch == ' ')
-				text.charAt(pos) && (C_BLACK, C_WHITE)
+			if (pos < text.length) {
+				if (ch == ' ')
+					text.charAt(pos) && (C_WHITE, C_BLACK)
 
-			else if (pos < text.length && ch == text.charAt(pos))
-				ch && (C_BLACK, C_GREEN)
+				else if (ch == text.charAt(pos))
+					ch && (C_GREEN, C_BLACK)
+
+
+				else
+					ch && (C_RED, C_BLACK)
+			}
 
 			else
-				ch && (C_BLACK, C_RED)
+				ch && (C_BLACK, C_BLACK)
 		}
 
-	private val pwdTin = CPTextInputSprite(
+	val pwdTin = new CPTextInputSprite(
 		"text",
 		6,
 		8,
 		1,
-		200,
-		200,
+		50,
+		50,
 		"",
 		mkSkin(true, true),
 		mkSkin(false, true),
@@ -35,7 +40,12 @@ object TerminalScene extends CPScene("terminal", None, BG_PX) {
 		next = Option("user")
 	)
 
+	private val timerSprite = new CPLabelSprite(6, 3, 1, text = "100", C_WHITE):
+		override def update(ctx: CPSceneObjectContext): Unit = 
+			this.setText((this.getText.toInt - 1).toString)
+
 	addObjects(
 		pwdTin,
+		timerSprite
 	)
 }
