@@ -72,12 +72,14 @@ class CompleteInputSprite(
 							buf.remove(currentPosition)
 
 					case key if submitKeys.contains(key) =>
-						done(Option(buf.toString()))
+						if (finished()) {
+							done(Option(buf.toString()))
 
-						// TODO: Verify if it's complete
+							if (next.isDefined)
+								ctx.acquireFocus(next.get)
 
-						if (next.isDefined)
-							ctx.acquireFocus(next.get)
+							// TODO: Finish stage
+						}
 
 					case key if key.isPrintable =>
 						if currentPosition < maxBuf then
@@ -95,6 +97,7 @@ class CompleteInputSprite(
 	private def done(optRes: Option[String]): Unit =
 		ready = true
 		res = optRes
+
 		if res.isEmpty then
 			reset()
 
@@ -104,16 +107,22 @@ class CompleteInputSprite(
 		reset()
 
 	private def correct() =
-		text.substring(0, buf.length).equals(buf.mkString(""))
+		text.substring(0, buf.length) == buf.mkString("")
 
-	private def skin(active: Boolean, finished: Boolean = false) =
+	private def finished() =
+		text == buf.mkString("")
+
+	private def skin(active: Boolean) =
 		(ch: Char, pos: Int, _: Boolean) => {
 			if (pos < text.length) {
-				if (ch == ' ' || !active)
-					text.charAt(pos) && (C_WHITE, C_BLACK)
+				if (!active)
+					text.charAt(pos) && (C_WHITE.darker(0.3), C_BLACK)
 
-				else if (pos <= lastCorrect || finished)
+				else if (pos <= lastCorrect)
 					ch && (C_GREEN, C_BLACK)
+
+				else if (ch == ' ')
+					text.charAt(pos) && (C_WHITE, C_BLACK)
 
 				else
 					ch && (C_RED, C_BLACK)

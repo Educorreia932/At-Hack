@@ -24,7 +24,7 @@ world hello"""
 			50,
 			50,
 			next = Option(s"line-${i + 1}"),
-			text = line
+			text = line.trim
 		)
 	}
 
