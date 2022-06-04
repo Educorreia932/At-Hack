@@ -5,10 +5,6 @@ import org.cosplay.CPPixel.*
 import org.cosplay.*
 import org.cosplay.CPKeyboardKey.*
 
-object GameState {
-	var time = 100.0
-}
-
 object TerminalScene extends CPScene("terminal", None, BG_PX) {
 	private val timerSprite = new CPLabelSprite(3, 3, 1, text = GameState.time.toString, C_WHITE) :
 		override def update(ctx: CPSceneObjectContext): Unit =
@@ -21,14 +17,14 @@ object TerminalScene extends CPScene("terminal", None, BG_PX) {
 		"""hello world
 world hello"""
 
-	private val inputs: Array[TypingInput] = lines.split("\n").zipWithIndex.map {
-		case (line, i) => new TypingInput(
+	private val inputs = lines.split("\n").zipWithIndex.map {
+		case (line, i) => new CompleteInputSprite(
 			s"line-${i}",
 			3, 6 + i, 1,
 			50,
 			50,
-			line,
-			Option(s"line-${i + 1}")
+			next = Option(s"line-${i + 1}"),
+			text = line
 		)
 	}
 
