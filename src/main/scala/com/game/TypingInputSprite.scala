@@ -82,7 +82,7 @@ class TypingInputSprite(
 								ctx.acquireFocus(next.get)
 
 							else
-								ctx.addScene(SuccessScene, true)
+								ctx.addScene(PewPewScene, true)
 						}
 
 					case key if key.isPrintable =>
