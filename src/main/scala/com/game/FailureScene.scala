@@ -42,12 +42,23 @@ object FailureScene extends CPScene("failure", None, BG_PX) {
 			  |
 			  |
 			  |
-			  |                 You failed⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+			  |                 You failed⠀⠀⠀⠀⠀
+			  |            Press Tab to try again⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
       """),
 		(ch, _, _) => ch & C_WHITE
 	)
 
+	private val inputSprite = CPOffScreenSprite(ctx => ctx.getKbEvent match {
+		case Some(evt) =>
+			evt.key match
+				case KEY_TAB =>
+					ctx.addScene(TypingScene, true, true)
+
+				case _ => ()	
+		case None => ()
+	})
+
 	private val sprite = new CPImageSprite(x = 55, y = 20, z = 0, image)
 
-	addObjects(sprite, layoutSprite)
+	addObjects(sprite, inputSprite)
 }

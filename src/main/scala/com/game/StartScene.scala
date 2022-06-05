@@ -15,18 +15,18 @@ import org.cosplay.prefabs.particles.confetti.CPConfettiEmitter
 import util.control.Breaks._
 
 
-object StartScreen extends CPScene("start", None, BG_PX) {
+object StartScene extends CPScene("start", None, BG_PX) {
 	private val titleSprite = new CPLabelSprite(x = 50, y = 20, z = 1, font = FIG_POISON, text = "@hack", C_WHITE)
 	private val infoSprite = new CPLabelSprite(x = 65, y = 40, z = 1, text = "Press Tab to hack", C_WHITE)
-	private val inptuSprite = CPOffScreenSprite(ctx => ctx.getKbEvent match {
+	private val inputSprite = CPOffScreenSprite(ctx => ctx.getKbEvent match {
 		case Some(evt) =>
 			evt.key match 
 				case KEY_TAB =>
-					ctx.addScene(TypingScene, true)
+					ctx.addScene(TypingScene, true, true)
 
 				case _ => ()
 		case None => ()
 	})
 
-	addObjects(titleSprite, infoSprite, inptuSprite)
+	addObjects(titleSprite, infoSprite, inputSprite)
 }

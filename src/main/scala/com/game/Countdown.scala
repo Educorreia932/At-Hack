@@ -16,7 +16,7 @@ object Countdown {
 			this.setText(BigDecimal(GameState.time).setScale(1, BigDecimal.RoundingMode.HALF_UP).toString + "%")
 			
 			if (GameState.time <= 0)
-				ctx.addScene(FailureScene, true)
+				ctx.addScene(FailureScene, true, true)
 
 	val objects: Array[CPSceneObject] = Array(timerSprite)
 }

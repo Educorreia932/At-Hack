@@ -76,7 +76,7 @@ class TypingInputSprite(
 							buf.remove(currentPosition)
 
 					case KEY_TAB =>
-						ctx.addScene(PewPewScene, true)
+						ctx.addScene(PewPewScene, true, true)
 
 					case key if submitKeys.contains(key) =>
 						if (finished()) {
@@ -88,7 +88,7 @@ class TypingInputSprite(
 								ctx.acquireFocus(next.get)
 
 							else
-								ctx.addScene(PewPewScene, true)
+								ctx.addScene(PewPewScene, true, true)
 						}
 
 					case key if key.isPrintable =>

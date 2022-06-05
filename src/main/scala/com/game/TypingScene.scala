@@ -6,7 +6,7 @@ import org.cosplay.*
 import CPKeyboardKey.*
 import CPArrayImage.*
 
-object TypingScene extends CPScene("terminal", None, BG_PX) {
+object TypingScene extends CPScene("typing", None, BG_PX) {
 	private def playMusic() = {
 		val music = CPSound(src = "bgMusic.wav")
 
