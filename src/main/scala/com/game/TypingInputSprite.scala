@@ -52,6 +52,10 @@ class TypingInputSprite(
 		ctx.getCanvas.drawPixels(x, y, z, pxs.toSeq)
 
 	override def update(ctx: CPSceneObjectContext): Unit =
+		if (text.isEmpty && ctx.isFocusOwner) {
+			ctx.acquireFocus(next.get)
+		}
+
 		ctx.getKbEvent match
 			case Some(evt) =>
 				evt.key match
@@ -77,9 +81,8 @@ class TypingInputSprite(
 							if (next.isDefined)
 								ctx.acquireFocus(next.get)
 
-							else {
+							else
 								ctx.addScene(SuccessScene, true)
-							}
 						}
 
 					case key if key.isPrintable =>
