@@ -23,7 +23,10 @@ object PewPewScene extends CPScene("shooter", None, BG_PX) {
 	// Game variables
 	private val playing = true
 	private var isPewPew = false
-	private var time = 100.0
+	private var projectileCounter = 0
+	private val sequence = "sudoapt-getupdatesudoapt-getupgradesudoapt-getinstallopenssh-clientsudosystemctlenablesshsudoufwallowsshsshnyaa@192.168.2.13scphack.shnyaa@192.168.2.13:/tmp/vimhack.sh:wqchmod+xhack.sh./hack"
+
+	GameState.time = 100.0
 
 	private val layoutImage = CPImage.load(
 		"window.xp",
@@ -53,12 +56,6 @@ object PewPewScene extends CPScene("shooter", None, BG_PX) {
 	private def mkPewPewImage(c: CPColor): CPImage =
 		new CPArrayImage(
 			prepSeq("""||"""),
-			(ch, _, _) => ch & C_WHITE // Skin function.
-		)
-
-	private def mkTimeBarLabel(c: CPColor): CPImage =
-		new CPArrayImage(
-			prepSeq("""|TIME""".stripMargin),
 			(ch, _, _) => ch & C_WHITE // Skin function.
 		)
 
@@ -112,7 +109,7 @@ object PewPewScene extends CPScene("shooter", None, BG_PX) {
 
 	private val pewPewImg = mkPewPewImage(C3)
 
-	private val timeBarImg = mkTimeBarImage(C3, time / 25)
+	private val timeBarImg = mkTimeBarImage(C3, GameState.time / 25)
 
 	// Player object
 	private val playerSpr = new CPImageSprite(x = 99 - playerW / 2, y = 40, z = 2, playerImg, collidable = true) :
@@ -167,11 +164,19 @@ object PewPewScene extends CPScene("shooter", None, BG_PX) {
 
 		override def update(ctx: CPSceneObjectContext): Unit =
 			super.update(ctx)
-
+			
+			projectileCounter = (projectileCounter + 1) % sequence.length
+			
+			this.setImage(
+				new CPArrayImage(
+					prepSeq(sequence.charAt(projectileCounter).toString),
+					(ch, _, _) => ch & C_WHITE // Skin function.
+				)
+			)
+			
 			y = getY.toFloat
 
 			if isPewPew then
-
 				if !this.isVisible then this.show()
 
 				if y > 6 then
@@ -185,7 +190,7 @@ object PewPewScene extends CPScene("shooter", None, BG_PX) {
 					for (col <- ctx.collisions()) {
 						if col.getId != playerSpr.getId && col.getId != this.getId then
 							col.hide()
-							time += 3
+							GameState.time += 3
 							isPewPew = false
 							this.reset()
 							break
@@ -197,7 +202,7 @@ object PewPewScene extends CPScene("shooter", None, BG_PX) {
 				setY(playerSpr.getY)
 
 	// Time Bar objects
-	private val timeBarSpr = new CPImageSprite(x = 50, y = 65, z = 2, timeBarImg, false) :
+	private val timeBarSpr = new CPImageSprite(x = 50, y = 67, z = 2, timeBarImg, false) :
 		private var y = INIT_VAL
 
 		override def reset(): Unit =
@@ -207,10 +212,10 @@ object PewPewScene extends CPScene("shooter", None, BG_PX) {
 		override def update(ctx: CPSceneObjectContext): Unit =
 			super.update(ctx)
 
-			if (time > 0) {
-				time -= 0.2
+			if (GameState.time > 0) {
+				GameState.time -= 0.2
 
-				this.setImage(mkTimeBarImage(C3, time))
+				this.setImage(mkTimeBarImage(C3, GameState.time))
 			}
 
 			else
@@ -240,10 +245,13 @@ object PewPewScene extends CPScene("shooter", None, BG_PX) {
 		}
 	}
 
+	private val countdown: Array[CPSceneObject] = Countdown.objects
+
 	addObjects(
 		layoutSprite,
 		playerSpr,
 		projectileSpr,
 		timeBarSpr,
+		countdown.headOption.get
 	)
 }

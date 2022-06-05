@@ -89,7 +89,7 @@ object TypingScene extends CPScene("terminal", None, BG_PX) {
 
 	private val timeBarImg = mkTimeBarImage(C_WHITE, GameState.time / 25)
 	private final val INIT_VAL = -1f
-	private val timeBarSpr = new CPImageSprite(x = 50, y = 65, z = 2, timeBarImg, false) :
+	private val timeBarSpr = new CPImageSprite(x = 50, y = 67, z = 2, timeBarImg, false) :
 		private var y = INIT_VAL
 
 		override def reset(): Unit =
@@ -109,7 +109,8 @@ object TypingScene extends CPScene("terminal", None, BG_PX) {
 				ctx.addScene(FailureScene, true)
 
 	addObjects(
-		inputs :+
+		inputs ++
+			countdown :+
 			layoutSprite :+
 			timeBarSpr :+
 			focus: _*

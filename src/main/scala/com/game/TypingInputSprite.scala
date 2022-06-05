@@ -74,7 +74,7 @@ class TypingInputSprite(
 					case KEY_DEL =>
 						if (buf.nonEmpty && currentPosition < buf.length)
 							buf.remove(currentPosition)
-							
+
 					case KEY_TAB =>
 						ctx.addScene(PewPewScene, true)
 
@@ -100,13 +100,13 @@ class TypingInputSprite(
 						if currentPosition < text.length then
 							buf.insert(currentPosition, key.ch)
 
-							currentPosition += 1
-							
-							if (key.ch != text.charAt(currentPosition - 1))
+							if (key.ch != text.charAt(currentPosition))
 								incorrectSnd.play()
 
 							else
 								correctSnd.play()
+
+							currentPosition += 1
 
 							if (correct()) {
 								lastCorrect += 1

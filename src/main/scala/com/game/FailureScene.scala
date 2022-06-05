@@ -30,12 +30,17 @@ object FailureScene extends CPScene("failure", None, BG_PX) {
 			  |.~~   :X@!.-~   ?@WTWo("*$$$W$TH$! `
 			  |Wi.~!X$?!-~    : ?$$$B$Wu("**$RM!
 			  |$R@i.~~ !     :   ~$$$$$B$$en:``
-			  |?MXT@Wx.~    :     ~"##*$$$$M~⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+			  |?MXT@Wx.~    :     ~"##*$$$$M~⠀⠀⠀⠀⠀⠀⠀
+			  |
+			  |
+			  |
+			  |
+			  |                 You failed⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
       """),
 		(ch, _, _) => ch & C_WHITE
 	)
 
-	private val sprite = new CPImageSprite(x = 30, y = 5, z = 0, image)
+	private val sprite = new CPImageSprite(x = 55, y = 20, z = 0, image)
 
 	addObjects(sprite)
 }
