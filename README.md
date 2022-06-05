@@ -11,7 +11,7 @@
 </p>
 
 This game was developed for the second edition of the [Level Up! Game Jam](https://levelup2022.nei-isep.org/) event
-organized by [NEI-ISEP](https://www.nei-isep.org/.
+organized by [NEI-ISEP](https://www.nei-isep.org/).
 
 It was developed during a 48-hour period, using the [Cosplay](https://github.com/nivanov/cosplay) engine.
 
