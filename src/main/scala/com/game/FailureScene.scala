@@ -8,12 +8,8 @@ import CPArrayImage.*
 import CPFIGLetFont.*
 
 object FailureScene extends CPScene("failure", None, BG_PX) {
-	private val layoutImage = CPImage.load(
-		"gameover.xp",
-		(px, _, _) => px.withBg(None)
-	)
-
-	private val layoutSprite = new CPImageSprite(x = 0, y = 0, z = 0, layoutImage)
+	private val titleSprite1 = new CPLabelSprite(x = 50, y = 10, z = 1, font = FIG_POISON, text = "You have been", C_WHITE)
+	private val titleSprite2 = new CPLabelSprite(x = 50, y = 30, z = 1, font = FIG_POISON, text = "hackerino", C_WHITE)
 
 	private def image: CPImage = new CPArrayImage(
 		prepSeq(
@@ -47,7 +43,7 @@ object FailureScene extends CPScene("failure", None, BG_PX) {
 		(ch, _, _) => ch & C_WHITE
 	)
 
-	private val sprite = new CPImageSprite(x = 55, y = 20, z = 0, image)
+	private val sprite = new CPImageSprite(x = 55, y = 40, z = 0, image)
 
-	addObjects(sprite, layoutSprite)
+	addObjects(sprite, titleSprite1, titleSprite2)
 }
