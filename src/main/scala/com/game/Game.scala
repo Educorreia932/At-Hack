@@ -1,15 +1,21 @@
 package com.game
 
-import org.cosplay.CPPixel.&&
-import org.cosplay.{CPColor, CPEngine}
+import org.cosplay.CPColor.*
+import org.cosplay.CPKeyboardKey.*
+import org.cosplay.*
+import org.cosplay.CPPixel.*
 
-val BLUE_BLACK = CPColor("0x00000F")
-val BG_PX = ' ' && (BLUE_BLACK, BLUE_BLACK) // Background pixel.
+val BG_PX = ' ' && (C_BLACK, C_BLACK) // Background pixel.
 
-object Game {
-	def main = {
-		CPEngine.startGame(TerminalScene)
+object Game:
+	def main(args: Array[String]): Unit = {
+		CPEngine.init(
+			CPGameInfo(name = "Level Up 2022"),
+			System.console() == null || args.contains("emuterm")
+		)
+
+		CPEngine.startGame(TypingScene)
+
+		sys.exit(0)
 	}
-
-	sys.exit(0)
-}
+		
