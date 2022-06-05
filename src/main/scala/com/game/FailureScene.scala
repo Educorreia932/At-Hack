@@ -8,6 +8,13 @@ import CPArrayImage.*
 import CPFIGLetFont.*
 
 object FailureScene extends CPScene("failure", None, BG_PX) {
+	private val layoutImage = CPImage.load(
+		"gameover.xp",
+		(px, _, _) => px.withBg(None)
+	)
+
+	private val layoutSprite = new CPImageSprite(x = 0, y = 0, z = 0, layoutImage)
+
 	private def image: CPImage = new CPArrayImage(
 		prepSeq(
 			"""
@@ -42,5 +49,5 @@ object FailureScene extends CPScene("failure", None, BG_PX) {
 
 	private val sprite = new CPImageSprite(x = 55, y = 20, z = 0, image)
 
-	addObjects(sprite)
+	addObjects(sprite, layoutSprite)
 }
