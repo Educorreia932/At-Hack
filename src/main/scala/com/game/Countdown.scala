@@ -14,6 +14,9 @@ object Countdown {
 
 			GameState.time -= 0.05
 			this.setText(GameState.time.toInt.toString)
+			
+			if (GameState.time <= 0)
+				ctx.addScene(FailureScene, true)
 
 	val objects: Array[CPSceneObject] = Array(timerSprite)
 }
