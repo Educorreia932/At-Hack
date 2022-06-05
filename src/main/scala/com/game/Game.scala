@@ -20,7 +20,7 @@ object Game:
 			System.console() == null || args.contains("emuterm")
 		)
 
-		CPEngine.startGame(TypingScene)
+		CPEngine.startGame(StartScreen)
 
 		sys.exit(0)
 	}

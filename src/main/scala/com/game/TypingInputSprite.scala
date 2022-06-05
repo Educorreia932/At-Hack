@@ -26,8 +26,8 @@ class TypingInputSprite(
 	private val submitKeys = Seq(KEY_ENTER)
 	private var wordScore = 0
 
-	val correctSnd = CPSound("correct.wav")
-	val incorrectSnd = CPSound("error.wav")
+	private val correctSnd = CPSound("correct.wav")
+	private val incorrectSnd = CPSound("error.wav")
 
 	reset()
 
