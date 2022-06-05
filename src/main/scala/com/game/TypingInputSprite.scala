@@ -26,6 +26,9 @@ class TypingInputSprite(
 	private val submitKeys = Seq(KEY_ENTER)
 	private var wordScore = 0
 
+	val correctSnd = CPSound("correct.wav")
+	val incorrectSnd = CPSound("error.wav")
+
 	reset()
 
 	private def reset(): Unit =
@@ -71,10 +74,13 @@ class TypingInputSprite(
 					case KEY_DEL =>
 						if (buf.nonEmpty && currentPosition < buf.length)
 							buf.remove(currentPosition)
+							
+					case KEY_TAB =>
+						ctx.addScene(PewPewScene, true)
 
 					case key if submitKeys.contains(key) =>
 						if (finished()) {
-							GameState.time += wordScore
+							GameState.time += wordScore * 1.5
 
 							done(Option(buf.toString()))
 
@@ -95,11 +101,19 @@ class TypingInputSprite(
 							buf.insert(currentPosition, key.ch)
 
 							currentPosition += 1
+							
+							if (key.ch != text.charAt(currentPosition - 1))
+								incorrectSnd.play()
+
+							else
+								correctSnd.play()
 
 							if (correct()) {
 								lastCorrect += 1
 								wordScore += 1
+								correctSnd.play()
 							}
+
 
 					case _ => ()
 
