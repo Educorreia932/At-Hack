@@ -7,25 +7,12 @@ import CPKeyboardKey.*
 import CPArrayImage.*
 
 object TypingScene extends CPScene("terminal", None, BG_PX) {
-	private def terminalImage: CPImage = new CPArrayImage(
-		prepSeq(
-			"""
-			  |	                               ⎯⠀❐⠀⤬
-			  |┌────────────────────────────────────┐
-			  |│                                    │
-			  |│                                    │
-			  |│                                    │
-			  |│                                    │
-			  |│                                    │
-			  |│                                    │
-			  |│                                    │
-			  |│                                    │
-			  |└────────────────────────────────────┘
-      	"""),
-		(ch, _, _) => ch & C_WHITE
+	private val layoutImage = CPImage.load(
+		"window.xp",
+		(px, _, _) => px.withBg(None)
 	)
-
-	private val terminalSprite = new CPImageSprite(x = 30, y = 15, z = 0, terminalImage)
+	
+	private val layoutSprite = new CPImageSprite(x = 0, y = 0, z = 0, layoutImage)
 
 	private val lines = prepSeq(
 		"""
@@ -48,15 +35,15 @@ object TypingScene extends CPScene("terminal", None, BG_PX) {
 	)
 
 	private val inputs = lines.zipWithIndex.map {
-		case (line, i) => 
+		case (line, i) =>
 			new TypingInputSprite(
-			s"line-${i}",
-			31,
-			17 + i,
-			1,
-			if i != lines.length - 1 then Option(s"line-${i + 1}") else None,
-			line.trim
-		)
+				s"line-${i}",
+				50,
+				5 + i,
+				1,
+				if i != lines.length - 1 then Option(s"line-${i + 1}") else None,
+				line.trim
+			)
 	}
 
 	private val focus = CPOffScreenSprite(ctx => if ctx.getSceneFrameCount == 0 then ctx.acquireFocus("line-0"))
@@ -64,8 +51,8 @@ object TypingScene extends CPScene("terminal", None, BG_PX) {
 
 	addObjects(
 		inputs ++
-			countdown :+
-			terminalSprite :+
-			focus: _*
+		countdown :+
+		layoutSprite :+
+		focus: _*
 	)
 }
