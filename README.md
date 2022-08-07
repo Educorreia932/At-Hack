@@ -10,6 +10,12 @@
   <img src="images/img_2.png" width="370"> 
 </p>
 
+<p align="center">
+  <a href="https://maddinosaur.itch.io/at-hack">
+    <img src="https://img.shields.io/badge/itch.io-page-red">
+  </a>
+</p>
+
 This game was developed for the second edition of the [Level Up! Game Jam](https://levelup2022.nei-isep.org/) event
 organized by [NEI-ISEP](https://www.nei-isep.org/).
 
